@@ -47,7 +47,7 @@ char* jsonMessage(char* jsonString, void (*downloadProgress)(long,long)) { // TO
 
         if (strcmp(message->valuestring, "version") == 0) {
             cJSON_AddNumberToObject(reply, "code", 0);
-            cJSON_AddStringToObject(reply, "version", "20180606.1132");
+            cJSON_AddStringToObject(reply, "version", "20180620.1125");
             
         } else if (strcmp(message->valuestring, "sendpraat") == 0) {
             const cJSON* arguments = cJSON_GetObjectItemCaseSensitive(json, "sendpraat");
