@@ -86,11 +86,14 @@ char* downloadHttpToLocal(char* line, char* authorization, void (*downloadProgre
             FILE* urlfile;
             // final name of the file - default to the last part of the URL path (but this might change)
             char* localfilename = malloc(256);
-            strcpy(localfilename, strrchr(token, '/') + 1);
+            // put the final file in the same directory as the temp file
+            strcpy(localfilename, tempfilename);
+            char* lastslashintempfilename = strrchr(localfilename, '/');
+            strcpy(lastslashintempfilename + 1, strrchr(token, '/') + 1);
             // ignore the query string, if any
             char* querystringstart = strchr(localfilename, '?');
             if (querystringstart) *querystringstart = '\0';
-            
+
             curl = curl_easy_init();
             if(curl) {
                 curl_easy_setopt(curl, CURLOPT_URL, token);
@@ -109,7 +112,7 @@ char* downloadHttpToLocal(char* line, char* authorization, void (*downloadProgre
                     
                     /* callbacks and options */
                     curl_easy_setopt(curl, CURLOPT_HEADERFUNCTION, header_callback);
-                    curl_easy_setopt(curl, CURLOPT_HEADERDATA, localfilename);
+                    curl_easy_setopt(curl, CURLOPT_HEADERDATA, lastslashintempfilename + 1);
                     curl_easy_setopt(curl, CURLOPT_WRITEDATA, urlfile);
                     curl_easy_setopt(curl, CURLOPT_XFERINFOFUNCTION, xferinfo);
                     curl_easy_setopt(curl, CURLOPT_XFERINFODATA, downloadProgress);
@@ -144,8 +147,11 @@ char* downloadHttpToLocal(char* line, char* authorization, void (*downloadProgre
                             remove(tempfilename); // delete the temporary file
                         } else {
                             // rename content file to something sensible
+                            //fprintf(stderr, "%s -> %s\n", tempfilename, localfilename);
                             if (rename(tempfilename, localfilename) != 0) {
-                                fprintf(stderr, "Could not rename %s to %s\n", tempfilename, localfilename);
+                                sprintf(statusErrorBuffer, "Could not rename %s to %s\n", tempfilename, localfilename);
+                                fprintf(stderr, statusErrorBuffer);
+                                *error = statusErrorBuffer;
                                 remove(tempfilename); // delete the temporary file
                             } else {
                                 // get canonical path of local file

@@ -14,7 +14,7 @@
 
 
 /* Processes a JSON message, and returns the JSON reply */
-char* jsonMessage(char* jsonString, void (*downloadProgress)(long,long)) { // TODO leaky
+char* jsonMessage(char* jsonString, void (*downloadProgress)(long,long)) { // TODO leaky?
     //fprintf (stderr, "Message: %s\n", jsonString);
     cJSON* reply = cJSON_CreateObject();
     cJSON *json = cJSON_Parse(jsonString);

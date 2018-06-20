@@ -98,6 +98,7 @@ typedef union {
 // send a JSON response back to the browser plugin
 void sendResponseNativeMessagingHost(char* jsonResponse) {
     if (jsonResponse != NULL) {
+        //fprintf (stderr, "Response: %s\n", jsonResponse);
         U32_U8 lenBuf;
         lenBuf.u32 = strlen(jsonResponse);
         fwrite(lenBuf.u8, 1, 4, stdout);
