@@ -16,8 +16,8 @@
 #include "sendpraat.h"
 
 void printUsage() {
-    printf ("Web-enabled senpraat can be used like standard sendpraat,\n");
-    printf (" but supports useing htt/https URLs instead of local file paths,\n");
+    printf ("Web-enabled sendpraat can be used like standard sendpraat,\n");
+    printf (" but supports useing http/https URLs instead of local file paths,\n");
     printf (" and can also process JSON messages, and function as a Chrome extension Native Messaging Host.\n");
     printf ("Syntax:\n");
 #if win
